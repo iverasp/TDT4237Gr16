@@ -14,15 +14,7 @@ class AdminController extends Controller
 
     function index()
     {
-        if (Auth::guest()) {
-            $this->app->flash('info', "You must be logged in to view the admin page.");
-            $this->app->redirect('/');
-        }
-
-        if (! Auth::isAdmin()) {
-            $this->app->flash('info', "You must be administrator to view the admin page.");
-            $this->app->redirect('/');
-        }
+        $this->check_auth();
 
         $variables = [
             'users' => User::all()
@@ -32,6 +24,7 @@ class AdminController extends Controller
 
     function delete($username)
     {
+        $this->check_auth();
         if (User::deleteByUsername($username) === 1) {
             $this->app->flash('info', "Sucessfully deleted '$username'");
         } else {
@@ -39,5 +32,18 @@ class AdminController extends Controller
         }
 
         $this->app->redirect('/admin');
+    }
+
+    function check_auth() {
+        if (Auth::guest()) {
+            $this->app->flash('info', 'You must be logged in to use this feature');
+            $this->app->redirect('/');
+        }
+
+        if (! Auth::isAdmin()) {
+            $this->app->flash('info', 'You must be administrator to use this feature');
+            $this->app->redirect('/');
+        }
+        return;
     }
 }
