@@ -148,6 +148,10 @@ class User
     {
         $validationErrors = [];
 
+        if (self::findByUser($user->getUserName())) {
+            array_push($validationErrors, 'Username exists. Pick another');
+        }
+
         if (strlen($user->user) < self::MIN_USER_LENGTH) {
             array_push($validationErrors, "Username too short. Min length is " . self::MIN_USER_LENGTH);
         }
