@@ -29,6 +29,10 @@ class UserController extends Controller
         $request = $this->app->request;
         $username = $request->post('user');
         $pass = $request->post('pass');
+        if (strlen($pass) <= 8) {
+            $this->app->flash('info', 'Password must be longer than 8 characters');
+            $this->app->redirect('/user/new');
+        }
 
         $hashed = Hash::make($pass);
 
