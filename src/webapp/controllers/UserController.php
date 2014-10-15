@@ -63,6 +63,8 @@ class UserController extends Controller
     {
         Auth::logout();
         $this->app->redirect('/?msg=Successfully logged out.');
+        session_unset();
+        session_destroy();
     }
 
     function show($username)

@@ -39,6 +39,8 @@ class LoginController extends Controller
                 setcookie("isadmin", "no");
             }
 
+            session_regenerate_id();
+
             $this->app->flash('info', "You are now successfully logged in as $user.");
             $this->app->redirect('/');
         } else {
