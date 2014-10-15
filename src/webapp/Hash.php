@@ -10,11 +10,11 @@ class Hash
 
     static function make($plaintext)
     {
-        return hash('sha512', $plaintext);
+        return password_hash($plaintext, PASSWORD_DEFAULT);
     }
 
     static function check($plaintext, $hash)
     {
-        return self::make($plaintext) === $hash;
+        return password_verify($plaintext, $hash);
     }
 }
