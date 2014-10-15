@@ -31,7 +31,7 @@ class Sql
     }
 
     static function insertDummyUsers() {
-        $hash1 = Hash::make(bin2hex(openssl_random_pseudo_bytes(2)));
+        $hash1 = Hash::make('lolcats');
         $hash2 = Hash::make('bobdylan');
         $hash3 = Hash::make('liverpool');
 
