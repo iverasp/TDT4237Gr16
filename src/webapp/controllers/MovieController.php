@@ -38,7 +38,7 @@ class MovieController extends Controller
     function addReview($id)
     {
         $author = Controller::process_url_params($this->app->request->post('author'));
-        $text = Controller:process_url_params($this->app->request->post('text'));
+        $text = Controller::process_url_params($this->app->request->post('text'));
 
         $review = MovieReview::makeEmpty();
         $review->setAuthor($author);
