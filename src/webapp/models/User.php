@@ -6,9 +6,10 @@ use tdt4237\webapp\Hash;
 
 class User
 {
-    const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin) VALUES('%s', '%s', '%s' , '%s' , '%s', '%s')";
-    const UPDATE_QUERY = "UPDATE users SET email='%s', age='%s', bio='%s', isadmin='%s' WHERE id='%s'";
     const FIND_BY_NAME = "SELECT * FROM users WHERE user='%s'";
+    const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin) VALUES(:user, :pass, :email , :age , :bio, :isadmin)";
+    const UPDATE_QUERY = "UPDATE users SET email= :email, age= :age, bio= :bio, isadmin= :isadmin WHERE id= :id";
+
 
     const MIN_USER_LENGTH = 3;
 
@@ -51,25 +52,25 @@ class User
     function save()
     {
         if ($this->id === null) {
-            $query = sprintf(self::INSERT_QUERY,
-                $this->user,
-                $this->pass,
-                $this->email,
-                $this->age,
-                $this->bio,
-                $this->isAdmin
-            );
+            $sth = self::$app->db->prepare(self::INSERT_QUERY);
+            return $sth->execute(array(
+                ':user' => $this->user,
+                ':pass' => $this->pass,
+                ':email' => $this->email,
+                ':age' => $this->age,
+                ':bio' => $this->bio,
+                ':isadmin' => $this->isAdmin
+            ));
         } else {
-            $query = sprintf(self::UPDATE_QUERY,
-                $this->email,
-                $this->age,
-                $this->bio,
-                $this->isAdmin,
-                $this->id
-            );
+            $sth = self::$app->db->prepare(self::UPDATE_QUERY);
+            return $sth->execute(array(
+                ':email' => $this->email,
+                ':age' => $this->age,
+                ':bio' => $this->bio,
+                ':isadmin' => $this->isAdmin,
+                ':id' => $this->id
+            ));
         }
-
-        return self::$app->db->exec($query);
     }
 
     function getId()
