@@ -4,12 +4,9 @@
 
 <h2>Reset password</h2>
 
-<b>{{ flash.info|raw }}</b> <br />
-<b>{{ flash.error|raw }}</b> <br />
-
 <form action="" method="POST">
-<label>Email: </label>
-<input type="email" name="email" required autofocus type="email" value="{{ email|raw }}"> <br />
+<label>Username: </label>
+<input name="username" required autofocus type="text" value="{{ username|raw }}"> <br />
 <input type="submit" name="submit" value="Reset password">
 </form>
 {% endblock %}
