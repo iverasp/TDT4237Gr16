@@ -26,7 +26,6 @@ class Controller
     function process_url_params($data) {
         $data = trim($data);
         $data = htmlspecialchars($data);
-        $data = $this->app->db->escapeString($data);
         return $data;
     }
 }
