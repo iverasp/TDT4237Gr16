@@ -83,13 +83,13 @@ class UserController extends Controller
         ]);
     }
 
-    function upload_profile_image() 
+    function upload_profile_image($user)
     {
         if ($_FILES["image"]["error"] > 0) {
             $this->app->flash('info', 'Return Code: " . $_FILES["bilde"]["error"] . ');
         }
         else {
-            $image_path = "../../web/images/users/" . $user->getUserName() ".jpg"
+            $image_path = "../../web/images/users/" . $user->getId() . ".jpg";
             move_uploaded_file($_FILES["image"]["tmp_name"], $image_path); 
             return $image_path;
         }
@@ -115,14 +115,15 @@ class UserController extends Controller
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
-            $image = Controller::process_url_params($request->post('image'))
+            $image = Controller::process_url_params($request->post('image'));
             if (strlen($image) > 0) {
-                $image = upload_profile_image($image);
+                $image = upload_profile_image($user);
             }
             
             $user->setEmail($email);
             $user->setBio($bio);
             $user->setAge($age);
+            $user->setImage($image);
 
             if (! User::validateAge($user)) {
                 $this->app->flashNow('error', 'Age must be between 0 and 150.');
