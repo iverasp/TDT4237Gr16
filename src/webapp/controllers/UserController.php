@@ -27,6 +27,7 @@ class UserController extends Controller
     function create()
     {
         $request = $this->app->request;
+        $email = Controller::process_url_params($request->post('email'));
         $username = Controller::process_url_params($request->post('user'));
         $pass = Controller::process_url_params($request->post('pass'));
         if (strlen($pass) < 8) {
@@ -41,6 +42,7 @@ class UserController extends Controller
         $hashed = Hash::make($pass);
 
         $user = User::makeEmpty();
+        $user->setEmail($email);
         $user->setUsername($username);
         $user->setHash($hashed);
 
