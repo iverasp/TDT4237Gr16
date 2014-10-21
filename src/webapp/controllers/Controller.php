@@ -24,6 +24,8 @@ class Controller
     }
 
     function process_url_params($data) {
-        return htmlspecialchars($data);
+        $data = trim($data);
+        $data = htmlspecialchars($data);
+        return $data;
     }
 }
