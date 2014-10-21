@@ -25,8 +25,8 @@ class LoginController extends Controller
     function login()
     {
         $request = $this->app->request;
-        $user = $request->post('user');
-        $pass = $request->post('pass');
+        $user = Controller::process_url_params($request->post('user'));
+        $pass = Controller::process_url_params$request->post('pass'));
 
         if (Auth::checkCredentials($user, $pass)) {
             $_SESSION['user'] = $user;
