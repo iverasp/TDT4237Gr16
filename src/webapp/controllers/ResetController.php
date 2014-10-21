@@ -19,9 +19,16 @@ class ResetController extends Controller
 
     function reset() {
         $request = $this->app->request;
-        $username = Controller::process_url_params($request->post('email'));
+        $username = Controller::process_url_params($request->post('username'));
+
         if (User::findByUser($username)) {
-        
+            $user = User::findByUser($username);
+            if($user->getEmail()) {
+                // send email to user
+            } else {
+                $this->app->flash('info', 'No email registered on user');
+                $this->app->redirect('/reset');
+            }
         } else {
             $this->app->flash('info', 'User not found in database');
             $this->app->redirect('/reset');
