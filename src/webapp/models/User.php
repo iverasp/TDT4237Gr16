@@ -193,7 +193,7 @@ class User
         $result = $sth->execute(array(
             ':username' => $username
         ));
-        $row = $result->fetch();
+        $row = $sth->fetch();
 
         if($row == false) {
             return null;
