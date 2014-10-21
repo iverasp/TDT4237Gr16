@@ -69,7 +69,14 @@ class MovieReview
 
         if ($this->id === null) {
             $query = "INSERT INTO moviereviews (movieid, author, text) "
-                   . "VALUES ('$movieId', '$author', '$text')";
+                   . "VALUES (:movieid, :author, :text)";
+            $sth = self::$app->db->prepare($query);
+            return $sth->execute(array(
+                ':movieid' => $movieId,
+                ':author' => $author,
+                ':text' => $text
+            ));
+
         } else {
             // TODO: Update moviereview here
         }
