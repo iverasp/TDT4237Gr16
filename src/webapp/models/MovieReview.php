@@ -4,7 +4,7 @@ namespace tdt4237\webapp\models;
 
 class MovieReview
 {
-    const SELECT_BY_ID = "SELECT * FROM moviereviews WHERE id = %s";
+    const SELECT_BY_ID = "SELECT * FROM moviereviews WHERE id = :id";
 
     private $id = null;
     private $movieId;
@@ -80,8 +80,6 @@ class MovieReview
         } else {
             // TODO: Update moviereview here
         }
-
-        return static::$app->db->exec($query);
     }
 
     static function makeEmpty()
@@ -94,16 +92,20 @@ class MovieReview
      */
     static function findByMovieId($id)
     {
-        $query = "SELECT * FROM moviereviews WHERE movieid = $id";
-        $results = self::$app->db->query($query);
-
+        $query = "SELECT * FROM moviereviews WHERE movieid = :id";
+        $sth = self::$app->db->prepare($query);
+        $sth->execute(array(
+            ':id' => $id
+        ));
+        
         $reviews = [];
+        $result = $sth->fetchAll();
 
-        foreach ($results as $row) {
+        foreach ($result as $row) {
             $review = self::makeFromRow($row);
             array_push($reviews, $review);
         }
-
+        
         return $reviews;
     }
 

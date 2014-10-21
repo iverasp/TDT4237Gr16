@@ -6,12 +6,13 @@ use tdt4237\webapp\Hash;
 
 class User
 {
-    const FIND_BY_NAME = "SELECT * FROM users WHERE user='%s'";
+    const FIND_BY_NAME = "SELECT * FROM users WHERE user=:username";
     const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin) VALUES(:user, :pass, :email , :age , :bio, :isadmin)";
     const UPDATE_QUERY = "UPDATE users SET email= :email, age= :age, bio= :bio, isadmin= :isadmin WHERE id= :id";
 
 
     const MIN_USER_LENGTH = 3;
+    const MAX_USER_LENGTH = 25;
 
     protected $id = null;
     protected $user;
@@ -157,6 +158,10 @@ class User
             array_push($validationErrors, "Username too short. Min length is " . self::MIN_USER_LENGTH);
         }
 
+        if (strlen($user->user) > self::MAX_USER_LENGTH) {
+            array_push($validationErrors, "Username too long. Max length is " . self::MAX_USER_LENGTH);
+        }
+
         if (preg_match('/^[A-Za-z0-9_]+$/', $user->user) === 0) {
             array_push($validationErrors, 'Username can only contain letters and numbers');
         }
@@ -184,8 +189,11 @@ class User
     static function findByUser($username)
     {
         $query = sprintf(self::FIND_BY_NAME, $username);
-        $result = self::$app->db->query($query, \PDO::FETCH_ASSOC);
-        $row = $result->fetch();
+        $sth = self::$app->db->prepare($query);
+        $result = $sth->execute(array(
+            ':username' => $username
+        ));
+        $row = $sth->fetch();
 
         if($row == false) {
             return null;
