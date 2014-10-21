@@ -61,7 +61,7 @@ class ResetController extends Controller
             $pass = Controller::process_url_params($request->post('pass'));
             $user->setHash(Hash::make($pass));
             $this->app->flash('info', 'Password reset. Now login');
-            $this->app->redirect('/');
+            $this->app->redirect('/login');
             }
 
     }
