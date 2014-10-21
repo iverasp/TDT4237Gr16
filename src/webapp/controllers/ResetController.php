@@ -14,7 +14,7 @@ class ResetController extends Controller
 
     function index()
     {
-        $this->render('reset.twig');
+        $this->render('resetForm.twig');
     }
 
     function reset() {
@@ -25,6 +25,8 @@ class ResetController extends Controller
             $user = User::findByUser($username);
             if($user->getEmail()) {
                 // send email to user
+                $this->app->flash('info', 'Reset link sent to email');
+                $this->app->redirect('/reset');
             } else {
                 $this->app->flash('info', 'No email registered on user');
                 $this->app->redirect('/reset');
@@ -33,6 +35,16 @@ class ResetController extends Controller
             $this->app->flash('info', 'User not found in database');
             $this->app->redirect('/reset');
             return;
+        }
+    }
+
+    function resetId($id) {
+        $this->render('reset.twig');
+        if (User::findResetId($id)) {
+            // allow user to reset password
+        } else {
+            $this->app->flash('info', 'Token not found in database');
+            $this->app->redirect('/reset');
         }
     }
 
