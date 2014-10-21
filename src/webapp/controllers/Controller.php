@@ -22,4 +22,8 @@ class Controller
 
         print $this->app->render($template, $variables);
     }
+
+    function process_url_params($data) {
+        return htmlspecialchars($data);
+    }
 }
