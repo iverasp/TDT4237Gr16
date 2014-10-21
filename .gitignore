@@ -4,6 +4,9 @@ composer.phar
 vendor/*
 *.php~
 
+# user images
+web/images/users/*
+
 #
 # OS garbage, Editors, IDEs, etc
 #
