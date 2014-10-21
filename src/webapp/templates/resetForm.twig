@@ -1,0 +1,12 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+
+<h2>Reset password</h2>
+
+<form action="" method="POST">
+<label>Username: </label>
+<input name="username" required autofocus type="text" value="{{ username|raw }}"> <br />
+<input type="submit" name="submit" value="Reset password">
+</form>
+{% endblock %}

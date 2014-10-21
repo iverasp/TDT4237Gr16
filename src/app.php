@@ -60,5 +60,6 @@ $app->post('/movies/:movieid', $ns . 'MovieController:addReview');
 // Reset password
 $app->get('/reset', $ns . 'ResetController:index')->name('resetPassword');
 $app->post('/reset', $ns . 'ResetController:reset');
+$app->get('/reset/:resetId', $ns . 'ResetController:resetId');
 
 return $app;
