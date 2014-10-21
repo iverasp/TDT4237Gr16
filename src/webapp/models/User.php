@@ -7,7 +7,7 @@ use tdt4237\webapp\Hash;
 class User
 {
     const FIND_BY_NAME = "SELECT * FROM users WHERE user=:username";
-    const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin) VALUES(:user, :pass, :email , :age , :bio, :isadmin)";
+    const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin, resetToken) VALUES(:user, :pass, :email , :age , :bio, :isadmin, :resetToken)";
     const UPDATE_QUERY = "UPDATE users SET email= :email, age= :age, bio= :bio, isadmin= :isadmin WHERE id= :id";
 
 
@@ -21,6 +21,7 @@ class User
     protected $bio = 'Bio is empty.';
     protected $age;
     protected $isAdmin = 0;
+    protected $resetToken;
 
     static $app;
 
@@ -28,7 +29,7 @@ class User
     {
     }
 
-    static function make($id, $username, $hash, $email, $bio, $age, $isAdmin)
+    static function make($id, $username, $hash, $email, $bio, $age, $isAdmin, $resetToken)
     {
         $user = new User();
         $user->id = $id;
@@ -38,6 +39,7 @@ class User
         $user->bio = $bio;
         $user->age = $age;
         $user->isAdmin = $isAdmin;
+        $user->resetToken = $resetToken;
 
         return $user;
     }
@@ -60,7 +62,8 @@ class User
                 ':email' => $this->email,
                 ':age' => $this->age,
                 ':bio' => $this->bio,
-                ':isadmin' => $this->isAdmin
+                ':isadmin' => $this->isAdmin,
+                ':resetToken' => $this->resetToken
             ));
         } else {
             $sth = self::$app->db->prepare(self::UPDATE_QUERY);
@@ -235,7 +238,8 @@ class User
             $row['email'],
             $row['bio'],
             $row['age'],
-            $row['isadmin']
+            $row['isadmin'],
+            $row['resetToken']
         );
     }
 }
