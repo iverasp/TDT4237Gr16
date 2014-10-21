@@ -118,6 +118,11 @@ class UserController extends Controller
         }
     }
 
+    function upload_profile_image() 
+    {
+
+    }
+
     function edit()
     {
         if (Auth::guest()) {
@@ -139,10 +144,12 @@ class UserController extends Controller
             $age = Controller::process_url_params($request->post('age'));
             //$image = Controller::process_url_params($request->post('image'));
             $this->upload_profile_image($user);
-
             $user->setEmail($email);
             $user->setBio($bio);
             $user->setAge($age);
+            // if (strlen($image) > 0) {
+            //     upload_profile_image($image);
+            // }
 
             if (! User::validateAge($user)) {
                 $this->app->flashNow('error', 'Age must be between 0 and 150.');
