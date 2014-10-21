@@ -27,8 +27,8 @@ class UserController extends Controller
     function create()
     {
         $request = $this->app->request;
-        $username = $request->post('user');
-        $pass = $request->post('pass');
+        $username = Controller::process_url_params($request->post('user'));
+        $pass = Controller::process_url_params($request->post('pass'));
         if (strlen($pass) < 8) {
             $this->app->flash('info', 'Password must be longer than 8 characters');
             $this->app->redirect('/user/new');
@@ -93,9 +93,9 @@ class UserController extends Controller
 
         if ($this->app->request->isPost()) {
             $request = $this->app->request;
-            $email = $request->post('email');
-            $bio = $request->post('bio');
-            $age = $request->post('age');
+            $email = Controller::process_url_params($request->post('email'));
+            $bio = Controller::process_url_params($request->post('bio'));
+            $age = Controller::process_url_params($request->post('age'));
 
             $user->setEmail($email);
             $user->setBio($bio);

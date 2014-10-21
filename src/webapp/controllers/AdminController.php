@@ -25,6 +25,7 @@ class AdminController extends Controller
     function delete($username)
     {
         $this->check_auth();
+        $username = Controller::process_url_params($username);
         if (User::deleteByUsername($username) === 1) {
             $this->app->flash('info', "Sucessfully deleted '$username'");
         } else {
