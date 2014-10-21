@@ -6,7 +6,7 @@ use tdt4237\webapp\Hash;
 
 class User
 {
-    const FIND_BY_NAME = "SELECT * FROM users WHERE user='%s'";
+    const FIND_BY_NAME = "SELECT * FROM users WHERE user=:username";
     const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin) VALUES(:user, :pass, :email , :age , :bio, :isadmin)";
     const UPDATE_QUERY = "UPDATE users SET email= :email, age= :age, bio= :bio, isadmin= :isadmin WHERE id= :id";
 
@@ -184,7 +184,10 @@ class User
     static function findByUser($username)
     {
         $query = sprintf(self::FIND_BY_NAME, $username);
-        $result = self::$app->db->query($query, \PDO::FETCH_ASSOC);
+        $sth = self::$app->db->prepare($query);
+        $result = $sth->execute(array(
+            ':username' => $username
+        ));
         $row = $result->fetch();
 
         if($row == false) {
