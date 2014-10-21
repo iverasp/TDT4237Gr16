@@ -196,8 +196,11 @@ class User
 
     static function deleteByUsername($username)
     {
-        $query = "DELETE FROM users WHERE user='$username' ";
-        return self::$app->db->exec($query);
+        $query = "DELETE FROM users WHERE user= :username";
+        $sth = self::$app->db->prepare($query);
+        return $sth->execute(array(
+            ':username' => $username
+        ));
     }
 
     static function all()
