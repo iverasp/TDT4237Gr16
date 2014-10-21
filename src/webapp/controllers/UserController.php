@@ -33,6 +33,10 @@ class UserController extends Controller
             $this->app->flash('info', 'Password must be longer than 8 characters');
             $this->app->redirect('/user/new');
         }
+        if (strlen($username) > 25) {
+            $this->app->flash('info', 'Please keep your username length less than 50 characters');
+            $this->app->redirect('/user/new');
+        }
 
         $hashed = Hash::make($pass);
 
