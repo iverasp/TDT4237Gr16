@@ -80,8 +80,6 @@ class MovieReview
         } else {
             // TODO: Update moviereview here
         }
-
-        return static::$app->db->exec($query);
     }
 
     static function makeEmpty()
