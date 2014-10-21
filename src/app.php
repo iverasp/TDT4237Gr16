@@ -57,4 +57,7 @@ $app->get('/movies', $ns . 'MovieController:index')->name('movies');
 $app->get('/movies/:movieid', $ns . 'MovieController:show');
 $app->post('/movies/:movieid', $ns . 'MovieController:addReview');
 
+// Reset password
+$app->get('/reset', $ns . 'ResetController:index')->name('resetPassword');
+
 return $app;
