@@ -77,7 +77,7 @@ class UserController extends Controller
 
         $this->render('showuser.twig', [
             'user' => $user,
-            'username' => $username
+            'username' => Controller::process_url_params($username)
         ]);
     }
 
