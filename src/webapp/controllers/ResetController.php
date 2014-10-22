@@ -28,7 +28,7 @@ class ResetController extends Controller
                 send an email to user with link
                 for password reset form */
                 
-                $token = openssl_random_pseudo_bytes(6);
+                $token = bin2hex(openssl_random_pseudo_bytes(6));
                 $user->setResetToken($token);
 
                 $this->app->render('resetEmail.twig', ['token' => $token]);
