@@ -4,6 +4,7 @@ namespace tdt4237\webapp\controllers;
 
 use tdt4237\webapp\Hash;
 use tdt4237\webapp\models\User;
+use tdt4237\webapp\models\Throttling;
 
 class ResetController extends Controller
 {
@@ -18,6 +19,12 @@ class ResetController extends Controller
     }
 
     function reset() {
+
+        if (Throttling::handleClient()) {
+            $this->app->flash('info', 'You can only reset password every 5 seconds');
+            $this->app->redirect('/');
+        }
+
         $request = $this->app->request;
         $username = Controller::process_url_params($request->post('username'));
 

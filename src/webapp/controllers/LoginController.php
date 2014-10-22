@@ -30,7 +30,7 @@ class LoginController extends Controller
         $pass = Controller::process_url_params($request->post('pass'));
         // Poor mans throttling
         if (Throttling::handleClient()) {
-            $this->app->flash('info', 'You only log in every 5 seconds');
+            $this->app->flash('info', 'You can only log in every 5 seconds');
             $this->app->redirect('/');
         }
 
