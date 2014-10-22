@@ -75,10 +75,12 @@ class Sql
         $q1 = "DROP TABLE users";
         $q4 = "DROP TABLE movies";
         $q5 = "DROP TABLE moviereviews";
+        $q6 = "DROP TABLE throttling";
 
         self::$pdo->exec($q1);
         self::$pdo->exec($q4);
         self::$pdo->exec($q5);
+        self::$pdo->exec($q6);
 
         print "[tdt4237] Done deleting all SQL tables.".PHP_EOL;
     }
