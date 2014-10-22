@@ -24,15 +24,23 @@ class ResetController extends Controller
         if (User::findByUser($username)) {
             $user = User::findByUser($username);
             if($user->getEmail()) {
-                // send email to user
-
-                $token = "hemmelig"; //should be random
+                /* Generate random token and
+                send an email to user with link
+                for password reset form */
+                
+                $token = openssl_random_pseudo_bytes(6);
                 $user->setResetToken($token);
 
-                $this->app->flash('info', 'Reset link sent to email');
-                $this->app->redirect('/reset');
+                $this->app->render('resetEmail.twig', ['token' => $token]);
+
+                /* The webapp would now send an email to the user
+                but as this requires third-pary-libs or a server
+                compatible with the mail() function, this has been
+                disabled */
+                //$this->app->flash('info', 'Reset link sent to email');
+                //$this->app->redirect('/reset');
             } else {
-                $this->app->flash('info', 'No email registered on user');
+                $this->app->flash('info', 'No email registered on user.');
                 $this->app->redirect('/reset');
             }
         } else {
@@ -45,8 +53,8 @@ class ResetController extends Controller
     function resetId($id) {
         $user = User::findResetId($id);
         if ($user) {
-            $this->render('reset.twig');
             // allow user to reset password
+            $this->render('reset.twig');
         } else {
             $this->app->flash('info', 'Token not found in database');
             $this->app->redirect('/reset');
@@ -56,14 +64,15 @@ class ResetController extends Controller
     function resetPass($id) {
             $user = User::findResetId($id);
             if ($user) {
-            $user->setResetToken(null);
-            $request = $this->app->request;
-            $pass = Controller::process_url_params($request->post('pass'));
-            $user->setHash(Hash::make($pass));
-            $this->app->flash('info', 'Password reset. Now login');
-            $this->app->redirect('/login');
+                $user->setResetToken(null);
+                $request = $this->app->request;
+                $pass = Controller::process_url_params($request->post('pass'));
+                $user->setHash(Hash::make($pass));
+                $this->app->flash('info', 'Password reset. Now login');
+                $this->app->redirect('/login');
+            } else {
+                $this->app->redirect('/');
             }
-
     }
 
 }

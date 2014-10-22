@@ -1,0 +1,17 @@
+{% extends 'base.twig' %}
+
+{% block content %}
+
+    <h2>Reset password email</h2>
+
+    {% if token %}
+    
+    <section id="email">
+    <p> Please follow <a href="/reset/{{ token|raw }}">this link</a> to reset your password</p>
+    </section>
+
+    {% else %}
+        Token not found.
+    {% endif %}
+
+{% endblock %}
