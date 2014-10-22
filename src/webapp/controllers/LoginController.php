@@ -3,6 +3,7 @@
 namespace tdt4237\webapp\controllers;
 
 use tdt4237\webapp\Auth;
+use tdt4237\webapp\models\Throttling;
 
 class LoginController extends Controller
 {
@@ -27,6 +28,11 @@ class LoginController extends Controller
         $request = $this->app->request;
         $user = Controller::process_url_params($request->post('user'));
         $pass = Controller::process_url_params($request->post('pass'));
+        // Poor mans throttling
+        if (Throttling::handleClient()) {
+            $this->app->flash('info', 'You only log in every 5 seconds');
+            $this->app->redirect('/');
+        }
 
         if (Auth::checkCredentials($user, $pass)) {
             $_SESSION['user'] = $user;
