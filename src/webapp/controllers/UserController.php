@@ -91,6 +91,41 @@ class UserController extends Controller
             'username' => Controller::process_url_params($username)
         ]);
     }
+    function error_flasher($error){
+        $this->app->flash('info', $error);
+        $this->app->redirect('/user/edit');
+    }
+
+    function upload_profile_image($user)
+    {
+        if ( isset($_FILES['image']['error']) and !is_array($_FILES['image']['error']) ) {
+            if( isset($_FILES['image']) and is_uploaded_file($_FILES['image']['tmp_name']) ) {
+                list($width, $height, $type, $attr) = getimagesize($_FILES['image']['tmp_name']);
+                $filesize  = filesize($_FILES['image']['tmp_name']);
+                if ($width <= 500 and $height <= 500 and $filesize <= 1*1000*1000) {
+                    //save only one image per user, unique by their id in the filestore.
+                    $filename = $user->getId() . '.jpg';
+                    $image_path = 'web/images/users/' . $filename;
+
+                    // Safe way to check file type.
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime = finfo_file($finfo, $_FILES['image']['tmp_name']);
+                    if ($mime == 'image/jpg' or $mime == 'image/jpeg' or $mime == 'image/png') {
+                        move_uploaded_file($_FILES['image']['tmp_name'], $image_path);
+                    } else {
+                        $this->error_flasher('Not a valid image type.');
+                    }
+                    finfo_close($finfo);
+                } else {
+                    $this->error_flasher('Image is too large. Max size is 500x500px and 1MB');
+                }
+            } else { // image is not set or is not an uploaded file.
+                $this->error_flasher('Not an image.');
+            }
+        } else {
+            $this->error_flasher('Invalid file.');
+        }
+    }
 
     function edit()
     {
@@ -112,7 +147,8 @@ class UserController extends Controller
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
-
+            //$image = Controller::process_url_params($request->post('image'));
+            $this->upload_profile_image($user);
             $user->setEmail($email);
             $user->setBio($bio);
             $user->setAge($age);

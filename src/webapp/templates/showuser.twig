@@ -8,6 +8,7 @@
 {{ flash.error|raw }} <br />
 
 {% if user %}
+    <img src=/images/users/{{ user.id|raw }}.jpg alt="This user has no picture." width="200">
     <table>
         <tr>
             <th>Id</th>
