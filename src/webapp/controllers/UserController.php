@@ -108,7 +108,7 @@ class UserController extends Controller
                     }
                     finfo_close($finfo);
                 } else {
-                    $this->error_flasher('Image is too large.');
+                    $this->error_flasher('Image is too large. Max size is 500x500px and 1MiB');
                 }
             } else { // image is not set or is not an uploaded file.
                 $this->error_flasher('Not an image.');
