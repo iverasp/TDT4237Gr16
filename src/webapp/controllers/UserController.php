@@ -92,8 +92,8 @@ class UserController extends Controller
         if ( isset($_FILES['image']['error']) and !is_array($_FILES['image']['error']) ) {
             if( isset($_FILES['image']) and is_uploaded_file($_FILES['image']['tmp_name']) ) {
                 list($width, $height, $type, $attr) = getimagesize($_FILES['image']['tmp_name']);
-
-                if ($width <= 500 and $height <= 500) {
+                $filesize  = filesize($_FILES['image']['tmp_name']);
+                if ($width <= 500 and $height <= 500 and $filesize <= 1*1000*1000) {
                     //save only one image per user, unique by their id in the filestore.
                     $filename = $user->getId() . '.jpg';
                     $image_path = 'web/images/users/' . $filename;
