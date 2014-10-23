@@ -14,18 +14,22 @@ class LoginController extends Controller
 
     function index()
     {
+        // CSRF countermeasure
+        $_SESSION['csrfToken'] = base64_encode(openssl_random_pseudo_bytes(32));
+
         if (Auth::check()) {
             $username = Auth::user()->getUserName();
             $this->app->flash('info', 'You are already logged in as ' . $username);
             $this->app->redirect('/');
         } else {
-            $this->render('login.twig', []);
+            $this->render('login.twig', ['csrfToken' => $_SESSION['csrfToken']]);
         }
     }
 
     function login()
     {
         $request = $this->app->request;
+        Controller::csrf_check($request);
         $user = Controller::process_url_params($request->post('user'));
         $pass = Controller::process_url_params($request->post('pass'));
         // Poor mans throttling
@@ -47,7 +51,6 @@ class LoginController extends Controller
 
             session_regenerate_id();
 
-            $_SESSION['csrfToken'] = base64_encode(openssl_random_pseudo_bytes(32));
 
             $this->app->flash('info', "You are now successfully logged in as $user.");
             $this->app->redirect('/');
