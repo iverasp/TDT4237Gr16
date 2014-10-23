@@ -22,11 +22,14 @@ class AdminController extends Controller
         $this->render('admin.twig', $variables);
     }
 
-    function delete($username)
+    function delete()
     {
         $this->check_auth();
+        $request = $this->app->request;
+        Controller::csrf_check($request);
+        $username = $request->post('username');
         $username = Controller::process_url_params($username);
-        if (User::deleteByUsername($username) === 1) {
+        if (User::deleteByUsername($username) === true) {
             $this->app->flash('info', "Sucessfully deleted '$username'");
         } else {
             $this->app->flash('info', "An error ocurred. Unable to delete user '$username'.");

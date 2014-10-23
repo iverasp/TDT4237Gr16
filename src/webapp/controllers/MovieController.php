@@ -39,6 +39,8 @@ class MovieController extends Controller
     {
         $author = Controller::process_url_params($this->app->request->post('author'));
         $text = Controller::process_url_params($this->app->request->post('text'));
+        $request = $this->app->request;
+        Controller::csrf_check($request);
 
         $review = MovieReview::makeEmpty();
         $review->setAuthor($author);
@@ -49,5 +51,7 @@ class MovieController extends Controller
 
         $this->app->flash('info', 'The review was successfully saved.');
         $this->app->redirect('/movies/' . $id);
+
+
     }
 }

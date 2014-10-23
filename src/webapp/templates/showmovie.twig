@@ -23,7 +23,10 @@
             <b>Author:</b><input type="text" name="author"><br>
 
             <textarea cols="40" rows="10" name="text"></textarea>
-            <input type="submit" name="submit" value="Save review">
+
+            <input type="hidden" name="csrfToken" value="{{csrfToken|raw}}"/>
+            <input type="submit" name="submit" value="Save review"/>
+
         </form>
     {% else %}
         Unable to find that movie.

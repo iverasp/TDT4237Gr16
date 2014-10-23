@@ -20,10 +20,12 @@ class Sql
         $q1 = "CREATE TABLE users (id INTEGER PRIMARY KEY, user VARCHAR(50), pass VARCHAR(50), email varchar(50), age varchar(50), bio varhar(50), isadmin INTEGER, resetToken varchar(50));";
         $q4 = "CREATE TABLE movies (id INTEGER PRIMARY KEY, name VARVHAR(50), imageurl VARCHAR(100) );";
         $q5 = "CREATE TABLE moviereviews (id INTEGER PRIMARY KEY, movieid INTEGER, author VARVHAR(50), text VARCHAR(500) );";
+        $q6 = "CREATE TABLE throttling (id INTEGER PRIMARY KEY, ip varchar(50), date INTEGER );";
 
         self::$pdo->exec($q1);
         self::$pdo->exec($q4);
         self::$pdo->exec($q5);
+        self::$pdo->exec($q6);
 
         print "[tdt4237] Done creating all SQL tables.".PHP_EOL;
 
@@ -74,10 +76,12 @@ class Sql
         $q1 = "DROP TABLE users";
         $q4 = "DROP TABLE movies";
         $q5 = "DROP TABLE moviereviews";
+        $q6 = "DROP TABLE throttling";
 
         self::$pdo->exec($q1);
         self::$pdo->exec($q4);
         self::$pdo->exec($q5);
+        self::$pdo->exec($q6);
 
         print "[tdt4237] Done deleting all SQL tables.".PHP_EOL;
     }

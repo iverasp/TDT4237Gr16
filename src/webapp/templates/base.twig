@@ -24,7 +24,10 @@
                 {% if isLoggedIn %}
                     Logged in as {{ loggedInUsername|raw }}.<br>
                     <a href="{{ urlFor('editprofile') }}">Edit profile</a> <br>
-                    <a href="{{ urlFor('logout') }}">Log out</a> <br>
+                    <form action="{{urlFor('logout')}}" method="POST">
+                    <input type="hidden" name="csrfToken" value="{{csrfToken|raw}}"/>
+                    <input type="submit" value="Logout">
+                    </form>
                 {% endif %}
 
                 {% if isAdmin %}

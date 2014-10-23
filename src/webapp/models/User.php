@@ -8,7 +8,7 @@ class User
 {
     const FIND_BY_NAME = "SELECT * FROM users WHERE user=:username";
     const INSERT_QUERY = "INSERT INTO users(user, pass, email, age, bio, isadmin, resetToken) VALUES(:user, :pass, :email , :age , :bio, :isadmin, :resetToken)";
-    const UPDATE_QUERY = "UPDATE users SET email= :email, age= :age, bio= :bio, isadmin= :isadmin WHERE id= :id";
+    const UPDATE_QUERY = "UPDATE users SET pass= :pass, email= :email, age= :age, bio= :bio, isadmin= :isadmin, resetToken= :resetToken WHERE id= :id";
 
 
     const MIN_USER_LENGTH = 3;
@@ -68,11 +68,13 @@ class User
         } else {
             $sth = self::$app->db->prepare(self::UPDATE_QUERY);
             return $sth->execute(array(
+                ':pass' => $this->pass,
                 ':email' => $this->email,
                 ':age' => $this->age,
                 ':bio' => $this->bio,
                 ':isadmin' => $this->isAdmin,
-                ':id' => $this->id
+                ':id' => $this->id,
+                ':resetToken' => $this->resetToken
             ));
         }
     }
@@ -125,6 +127,7 @@ class User
     function setHash($hash)
     {
         $this->pass = $hash;
+        $this->save();
     }
 
     function setEmail($email)
@@ -142,6 +145,12 @@ class User
         $this->age = $age;
     }
 
+    function setResetToken($token) {
+        $this->resetToken = $token;
+        $this->save();
+
+    }
+
     /**
      * The caller of this function can check the length of the returned 
      * array. If array length is 0, then all checks passed.
@@ -152,10 +161,6 @@ class User
     static function validate(User $user)
     {
         $validationErrors = [];
-
-        if (self::findByUser($user->getUserName())) {
-            array_push($validationErrors, 'Username exists. Pick another');
-        }
 
         if (strlen($user->user) < self::MIN_USER_LENGTH) {
             array_push($validationErrors, "Username too short. Min length is " . self::MIN_USER_LENGTH);
@@ -182,6 +187,22 @@ class User
 
         return false;
     }
+
+    static function findResetId($id) {
+        $query = "SELECT * from users where resetToken = :resetToken";
+        $sth = self::$app->db->prepare($query);
+        $result = $sth->execute(array(
+            ':resetToken' => $id
+        ));
+        
+        $row = $sth->fetch();
+
+        if ($row == false) { return null; }
+
+        return User::makeFromSql($row);
+    }
+
+
 
     /**
      * Find user in db by username.

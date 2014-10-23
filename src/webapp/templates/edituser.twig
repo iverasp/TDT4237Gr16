@@ -20,6 +20,8 @@
         <label>Image (jpg):</label>
         <input type="file" name="image"><br />
 
+        <input type="hidden" name="csrfToken" value="{{csrfToken|raw}}" />
+
         <input type="submit" name="submit" value="Save profile">
 
     </form>

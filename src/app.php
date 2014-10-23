@@ -46,11 +46,11 @@ $app->get('/user/:username', $ns . 'UserController:show')->name('showuser');
 $app->get('/users', $ns . 'UserController:all');
 
 // Log out
-$app->get('/logout', $ns . 'UserController:logout')->name('logout');
+$app->post('/logout', $ns . 'UserController:logout')->name('logout');
 
 // Admin restricted area
 $app->get('/admin', $ns . 'AdminController:index')->name('admin');
-$app->get('/admin/delete/:username', $ns . 'AdminController:delete');
+$app->post('/admin/delete', $ns . 'AdminController:delete')->name('delete');
 
 // Movies
 $app->get('/movies', $ns . 'MovieController:index')->name('movies');
@@ -61,5 +61,6 @@ $app->post('/movies/:movieid', $ns . 'MovieController:addReview');
 $app->get('/reset', $ns . 'ResetController:index')->name('resetPassword');
 $app->post('/reset', $ns . 'ResetController:reset');
 $app->get('/reset/:resetId', $ns . 'ResetController:resetId');
+$app->post('/reset/:resetId', $ns . 'ResetController:resetPass');
 
 return $app;

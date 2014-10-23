@@ -30,6 +30,10 @@ class UserController extends Controller
         $email = Controller::process_url_params($request->post('email'));
         $username = Controller::process_url_params($request->post('user'));
         $pass = Controller::process_url_params($request->post('pass'));
+        if (User::findByUser($username)) {
+            $this->app->flash('info', 'Username exists. Pick another');
+            $this->app->redirect('/user/new');
+        }
         if (strlen($pass) < 8) {
             $this->app->flash('info', 'Password must be longer than 8 characters');
             $this->app->redirect('/user/new');
@@ -67,6 +71,11 @@ class UserController extends Controller
 
     function logout()
     {
+
+        if ($this->app->request->isPost()) {
+            $request = $this->app->request;
+            Controller::csrf_check($request);
+        }
         Auth::logout();
         $this->app->redirect('/?msg=Successfully logged out.');
         session_unset();
@@ -134,6 +143,7 @@ class UserController extends Controller
 
         if ($this->app->request->isPost()) {
             $request = $this->app->request;
+            Controller::csrf_check($request);
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
@@ -151,6 +161,6 @@ class UserController extends Controller
             }
         }
 
-        $this->render('edituser.twig', ['user' => $user]);
+        $this->render('edituser.twig', ['user' => $user, 'csrfToken' => $_SESSION['csrfToken']]);
     }
 }
