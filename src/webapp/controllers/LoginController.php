@@ -47,6 +47,8 @@ class LoginController extends Controller
 
             session_regenerate_id();
 
+            $_SESSION['csrfToken'] = base64_encode(openssl_random_pseudo_bytes(32));
+
             $this->app->flash('info', "You are now successfully logged in as $user.");
             $this->app->redirect('/');
         } else {

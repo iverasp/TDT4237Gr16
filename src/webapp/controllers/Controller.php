@@ -31,6 +31,7 @@ class Controller
 
     function csrf_check($request) {
         if (Controller::process_url_params($request->post('csrfToken')) != $_SESSION['csrfToken']) {
+
             $this->app->flash('info', 'Something went wrong!');
             $this->app->redirect('/');
         }

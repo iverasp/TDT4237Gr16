@@ -117,6 +117,6 @@ class UserController extends Controller
             }
         }
 
-        $this->render('edituser.twig', ['user' => $user]);
+        $this->render('edituser.twig', ['user' => $user, 'csrfToken' => $_SESSION['csrfToken']]);
     }
 }

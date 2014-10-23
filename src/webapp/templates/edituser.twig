@@ -16,7 +16,7 @@
         <label>Age:</label>
         <input type="text" name="age" value="{{ user.age|raw }}"> <br />
 
-        <input type="hidden" name="csrfToken" value="<?php echo($_SESSION['csrfToken']) ?>" />
+        <input type="hidden" name="csrfToken" value="{{csrfToken|raw}}" />
 
         <input type="submit" name="submit" value="Save profile">
     </form>
