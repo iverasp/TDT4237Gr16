@@ -49,8 +49,6 @@ class MovieController extends Controller
 
         $review->save();
 
-        $this->render('showmovie.twig', ['user' => $user, 'csrfToken' => $_SESSION['csrfToken']]);
-
         $this->app->flash('info', 'The review was successfully saved.');
         $this->app->redirect('/movies/' . $id);
 
