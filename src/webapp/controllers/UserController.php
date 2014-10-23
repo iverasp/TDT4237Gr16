@@ -83,16 +83,20 @@ class UserController extends Controller
         ]);
     }
 
-    function upload_profile_image($user)
+    function upload_profile_image()
     {
+        $this->app->flash('info', 'upload_profile_image() activated');
         if(isset($_FILES['image'])){
+            //save only one image per user, unique by their id in the filestore.
+            $filename = $this->$user->getId() . ".jpg";
+            
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime=finfo_file($finfo, $_FILES['image']);
+            $mime = finfo_file($finfo, $_FILES['image']);
             if($mime=='image/jpg'){
-                $image_path = "../../web/images/users/" . $user->getId() . ".jpg";
+                $image_path = "../../web/images/users/" . $filename;
                 move_uploaded_file($_FILES["image"]["tmp_name"], $image_path);
             } else {
-                $this->app->flash('info', 'Return Code: " . $_FILES["bilde"]["error"] . ');
+                $this->app->flash('info', 'Return Code: " '. $_FILES["images"]["error"] .' ');
             }
             finfo_close($finfo);
         }
@@ -118,10 +122,11 @@ class UserController extends Controller
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
             $image = Controller::process_url_params($request->post('image'));
+
             if (strlen($image) > 0) {
-                upload_profile_image($user);
+                $this->upload_profile_image();
             }
-            
+
             $user->setEmail($email);
             $user->setBio($bio);
             $user->setAge($age);

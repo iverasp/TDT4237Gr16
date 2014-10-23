@@ -4,7 +4,7 @@
 
     <h2>Edit profile</h2>
 
-    <form action="" method="POST">
+    <form action="" method="POST" enctype="multipart/form-data">
         <div id="flasherror">{{ flash.error|raw }}</div>
 
         <label>email:</label>
@@ -16,12 +16,12 @@
         <label>Age:</label>
         <input type="text" name="age" value="{{ user.age|raw }}"> <br />
 
-        <input type="submit" name="submit" value="Save profile">
-    </form>
 
-    <form action="" method="POST" enctype="multipart/form-data">
-        Please choose a file: <input type="file" name="image"><br>
-        <input type="submit" value="Upload File">
+        <label>Image:</label>
+        <input type="file" name="image"><br />
+
+        <input type="submit" name="submit" value="Save profile">
+
     </form>
 
 {% endblock %}
