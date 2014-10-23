@@ -82,23 +82,39 @@ class UserController extends Controller
             'username' => Controller::process_url_params($username)
         ]);
     }
+    function error_flasher($error){
+        $this->app->flash('info', $error);
+        $this->app->redirect('/user/edit');
+    }
 
-    function upload_profile_image()
+    function upload_profile_image($user)
     {
-        $this->app->flash('info', 'upload_profile_image() activated');
-        if(isset($_FILES['image'])){
-            //save only one image per user, unique by their id in the filestore.
-            $filename = $this->$user->getId() . ".jpg";
-            
-            $finfo = finfo_open(FILEINFO_MIME_TYPE);
-            $mime = finfo_file($finfo, $_FILES['image']);
-            if($mime=='image/jpg'){
-                $image_path = "../../web/images/users/" . $filename;
-                move_uploaded_file($_FILES["image"]["tmp_name"], $image_path);
-            } else {
-                $this->app->flash('info', 'Return Code: " '. $_FILES["images"]["error"] .' ');
+        if ( isset($_FILES['image']['error']) and !is_array($_FILES['image']['error']) ) {
+            if( isset($_FILES['image']) and is_uploaded_file($_FILES['image']['tmp_name']) ) {
+                list($width, $height, $type, $attr) = getimagesize($_FILES['image']['tmp_name']);
+
+                if ($width <= 500 and $height <= 500) {
+                    //save only one image per user, unique by their id in the filestore.
+                    $filename = $user->getId() . '.jpg';
+                    $image_path = 'web/images/users/' . $filename;
+
+                    // Safe way to check file type.
+                    $finfo = finfo_open(FILEINFO_MIME_TYPE);
+                    $mime = finfo_file($finfo, $_FILES['image']['tmp_name']);
+                    if ($mime == 'image/jpg' or $mime == 'image/jpeg' or $mime == 'image/png') {
+                        move_uploaded_file($_FILES['image']['tmp_name'], $image_path);
+                    } else {
+                        $this->error_flasher('Not a valid image type.');
+                    }
+                    finfo_close($finfo);
+                } else {
+                    $this->error_flasher('Image is too large.');
+                }
+            } else { // image is not set or is not an uploaded file.
+                $this->error_flasher('Not an image.');
             }
-            finfo_close($finfo);
+        } else {
+            $this->error_flasher('Invalid file.');
         }
     }
 
@@ -121,21 +137,18 @@ class UserController extends Controller
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
-            $image = Controller::process_url_params($request->post('image'));
-
-            if (strlen($image) > 0) {
-                $this->upload_profile_image();
-            }
+            //$image = Controller::process_url_params($request->post('image'));
+            $this->upload_profile_image($user);
 
             $user->setEmail($email);
             $user->setBio($bio);
             $user->setAge($age);
 
             if (! User::validateAge($user)) {
-                $this->app->flashNow('error', 'Age must be between 0 and 150.');
+                //$this->app->flashNow('error', 'Age must be between 0 and 150.');
             } else {
                 $user->save();
-                $this->app->flashNow('info', 'Your profile was successfully saved.');
+                //$this->app->flashNow('info', 'Your profile was successfully saved.');
             }
         }
 
