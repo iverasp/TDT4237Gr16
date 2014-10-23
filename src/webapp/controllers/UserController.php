@@ -99,11 +99,8 @@ class UserController extends Controller
         }
 
         if ($this->app->request->isPost()) {
-            if (Controller::process_url_params($request->post('csrfToken')) != $_SESSION['csrfToken']) {
-                $this->app->flash('info', 'Something went wrong!');
-                $this->app->redirect('/');
-            }
             $request = $this->app->request;
+            Controller::csrf_check($request);
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
             $age = Controller::process_url_params($request->post('age'));
