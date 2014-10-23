@@ -68,6 +68,10 @@ class UserController extends Controller
     function logout()
     {
 
+        if ($this->app->request->isPost()) {
+            $request = $this->app->request;
+            Controller::csrf_check($request);
+        }
         Auth::logout();
         $this->app->redirect('/?msg=Successfully logged out.');
         session_unset();
