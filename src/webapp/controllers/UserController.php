@@ -118,19 +118,6 @@ class UserController extends Controller
         }
     }
 
-    function upload_profile_image() 
-    {
-        if ($_FILES["image"]["error"] > 0) {
-            $this->app->flash('info', 'Return Code: " . $_FILES["bilde"]["error"] . ');
-        }
-        else {
-            $image_path = "../../web/images/users/" . $user->getUserName() ".jpg"
-            move_uploaded_file($_FILES["image"]["tmp_name"], $image_path); 
-            return $image_path;
-        }
-
-    }
-
     function edit()
     {
         if (Auth::guest()) {
