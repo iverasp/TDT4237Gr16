@@ -96,7 +96,7 @@ class UserController extends Controller
         $this->app->redirect('/user/edit');
     }
 
-    function upload_profile_image()
+    function upload_profile_image($user)
     {
         if ( isset($_FILES['image']['error']) and !is_array($_FILES['image']['error']) ) {
             if( isset($_FILES['image']) and is_uploaded_file($_FILES['image']['tmp_name']) ) {
