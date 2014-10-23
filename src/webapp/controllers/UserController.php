@@ -67,6 +67,7 @@ class UserController extends Controller
 
     function logout()
     {
+
         Auth::logout();
         $this->app->redirect('/?msg=Successfully logged out.');
         session_unset();
@@ -98,6 +99,10 @@ class UserController extends Controller
         }
 
         if ($this->app->request->isPost()) {
+            if (Controller::process_url_params($request->post('csrfToken')) != $_SESSION['csrfToken']) {
+                $this->app->flash('info', 'Something went wrong!');
+                $this->app->redirect('/');
+            }
             $request = $this->app->request;
             $email = Controller::process_url_params($request->post('email'));
             $bio = Controller::process_url_params($request->post('bio'));
