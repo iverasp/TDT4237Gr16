@@ -108,7 +108,7 @@ class UserController extends Controller
                     }
                     finfo_close($finfo);
                 } else {
-                    $this->error_flasher('Image is too large. Max size is 500x500px and 1MiB');
+                    $this->error_flasher('Image is too large. Max size is 500x500px and 1MB');
                 }
             } else { // image is not set or is not an uploaded file.
                 $this->error_flasher('Not an image.');
@@ -145,10 +145,10 @@ class UserController extends Controller
             $user->setAge($age);
 
             if (! User::validateAge($user)) {
-                //$this->app->flashNow('error', 'Age must be between 0 and 150.');
+                $this->app->flashNow('error', 'Age must be between 0 and 150.');
             } else {
                 $user->save();
-                //$this->app->flashNow('info', 'Your profile was successfully saved.');
+                $this->app->flashNow('info', 'Your profile was successfully saved.');
             }
         }
 
