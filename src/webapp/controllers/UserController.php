@@ -30,6 +30,10 @@ class UserController extends Controller
         $email = Controller::process_url_params($request->post('email'));
         $username = Controller::process_url_params($request->post('user'));
         $pass = Controller::process_url_params($request->post('pass'));
+        if (User::findByUser($username)) {
+            $this->app->flash('info', 'Username exists. Pick another');
+            $this->app->redirect('/user/new');
+        }
         if (strlen($pass) < 8) {
             $this->app->flash('info', 'Password must be longer than 8 characters');
             $this->app->redirect('/user/new');
