@@ -27,7 +27,7 @@ class ResetController extends Controller
 
         $request = $this->app->request;
         $username = Controller::process_url_params($request->post('username'));
-
+        Controller::check_csrf($request);
         if (User::findByUser($username)) {
             $user = User::findByUser($username);
             if($user->getEmail()) {
@@ -73,6 +73,7 @@ class ResetController extends Controller
             if ($user) {
                 $user->setResetToken(null);
                 $request = $this->app->request;
+                Controller::check_csrf($request);
                 $pass = Controller::process_url_params($request->post('pass'));
                 $user->setHash(Hash::make($pass));
                 $this->app->flash('info', 'Password reset. Now login');

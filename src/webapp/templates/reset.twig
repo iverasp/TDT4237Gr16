@@ -7,6 +7,7 @@
 <form action="" method="POST">
 <label>New password: </label>
 <input name="pass" required autofocus type="password" value="{{ password|raw }}"> <br />
+<input type="hidden" name="csrfToken" value="{{csrfToken|raw}}"/>
 <input type="submit" name="submit" value="Set password">
 </form>
 {% endblock %}
