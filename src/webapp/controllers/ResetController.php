@@ -73,7 +73,7 @@ class ResetController extends Controller
             if ($user) {
                 $user->setResetToken(null);
                 $request = $this->app->request;
-                Controller::check_csrf($request);
+                Controller::csrf_check($request);
                 $pass = Controller::process_url_params($request->post('pass'));
                 $user->setHash(Hash::make($pass));
                 $this->app->flash('info', 'Password reset. Now login');
