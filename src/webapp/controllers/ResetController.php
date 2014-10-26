@@ -27,7 +27,7 @@ class ResetController extends Controller
 
         $request = $this->app->request;
         $username = Controller::process_url_params($request->post('username'));
-        Controller::check_csrf($request);
+        Controller::csrf_check($request);
         if (User::findByUser($username)) {
             $user = User::findByUser($username);
             if($user->getEmail()) {
